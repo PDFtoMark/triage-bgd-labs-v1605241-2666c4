@@ -17,3 +17,18 @@ jobs:
     uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
     secrets:
       ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: craft artifact
+        run: |
+          mkdir -p /tmp/content
+          echo "${{ github.event.pull_request.number }}" > /tmp/content/pr_number.txt
+          echo "report from prepared Test workflow" > /tmp/content/report.txt
+      - name: upload artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: contentdefault
+          path: /tmp/content
+          if-no-files-found: error
