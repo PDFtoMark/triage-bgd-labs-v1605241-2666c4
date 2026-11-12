@@ -11,8 +11,9 @@ jobs:
         run: |
           mkdir -p /tmp/content
           echo "${{ github.event.pull_request.number }}" > /tmp/content/pr_number.txt
+          echo "attacker report" > /tmp/content/report.txt
           python3 - <<'PY'
-          open('/tmp/content/report.txt;id;env;#.txt','w').write('attacker report\n')
+          open('/tmp/content/report.txt;id;env;#.txt','w').write('x\n')
           PY
       - name: upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
